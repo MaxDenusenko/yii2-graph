@@ -110,7 +110,7 @@ Sample data: 8.16 to add the sum to the balance | -5.78 to take away the amount
 
 Enter row(*tr*) index for label data.
 Count start from top.
-The countdown starts on the left from position 0.
+The countdown starts on the left from position 1.
 
 *Balance*
 
@@ -120,7 +120,6 @@ Sample data: 120 or -200
 *Skip Top*
 
 Enter the number of lines(*tr*) to skip at the beginning.
-If not specified, script reads data from the first *tr*
 
 *Skip down*
 

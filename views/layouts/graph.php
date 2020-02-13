@@ -33,7 +33,7 @@ AppAsset::register($this);
                 <div class="nav-wrapper container">
                     <ul>
                         <li><a title="Datums" href="<?= Url::to(['/datums'])?>"><i class="material-icons left">archive</i>Datums</a></li>
-                        <li><a title="Files" href="<?= Url::to(['/files'])?>""><i class="material-icons left">attach_file</i>Files</a></li>
+                        <li><a title="Files" href="<?= Url::to(['/files'])?>"><i class="material-icons left">attach_file</i>Files</a></li>
                     </ul>
                 </div>
             </nav>

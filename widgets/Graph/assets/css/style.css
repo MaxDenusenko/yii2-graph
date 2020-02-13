@@ -1,0 +1,121 @@
+.balance_column {
+    background-color: cornflowerblue;
+    color: white;
+}
+
+#table {
+    margin: 50px 0;
+}
+
+.table_data tr {
+    cursor: pointer;
+}
+
+.panel-body {
+    overflow: auto;
+}
+
+.m {
+    margin: 40px 0;
+}
+
+.graph_container {
+    margin: 50px 100px;
+}
+
+nav.nav-center ul li a.sidenav-trigger {
+    display: none;
+}
+
+.table_data .ui.grid {
+    margin: 0;
+}
+
+.table_data .ui.grid>.row>[class*="eight wide"].column {
+    width: 49%!important;
+}
+
+.table_data .right.aligned.eight.wide.column .ui.input input[type=search] {
+    height: 17px;
+}
+
+.sidenav.sidenav-fixed {
+    text-align: center;
+    padding: 20px 30px;
+}
+
+#return-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.7);
+    width: 50px;
+    height: 50px;
+    text-decoration: none;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    display: none;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#return-to-top i {
+    color: #fff;
+    margin: 0;
+    position: relative;
+    left: 16px;
+    top: 13px;
+    font-size: 19px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#return-to-top:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+#return-to-top:hover i {
+    color: #fff;
+    top: 5px;
+}
+
+.sidenav-fixed .input-field,
+.sidenav-fixed input {
+    color: #fff;
+}
+
+.sidenav-fixed .input-field input[type=text]:focus {
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff;
+}
+
+@media only screen and (max-width : 992px) {
+
+    .collapsible-body {
+        padding: 0;
+    }
+
+    #DataTables_Table_0_length,
+    #DataTables_Table_0_filter {
+        text-align: center;
+    }
+
+    .graph_container {
+        margin: 100px 50px;
+    }
+}
+
+@media only screen and (max-width : 460px) {
+
+    .graph_container {
+        margin: 30px 10px;
+    }
+}

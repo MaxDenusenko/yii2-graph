@@ -5,11 +5,13 @@ namespace app\widgets\Graph;
 
 
 use app\assets\ChartJsAssetBundle;
+use DateTime;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use Yii;
 use yii\bootstrap\Widget;
 use yii\db\Exception;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * Class Graph
@@ -63,7 +65,7 @@ class Graph extends Widget
         foreach ($this->data as $datum) {
 
             $this->fileName     = $datum['file'];
-            $this->balance      = isset($datum['balance']) ? (float)$datum['balance'] : 0;
+            $this->balance      = $this->setBalance($datum);
             $this->skipTop      = isset($datum['skipTop']) ? (int)$datum['skipTop'] : 0;
             $this->skipDown     = isset($datum['skipDown']) ? (int)$datum['skipDown'] : 0;
             $this->maxElement   = isset($datum['maxElement']) ? (int)$datum['maxElement'] : false;
@@ -112,6 +114,19 @@ class Graph extends Widget
 
         return $this->render('render', compact('summaryData'));
 
+    }
+
+    private function setBalance($datum)
+    {
+        $balance = 0;
+        if (isset($datum['balance']) && (float)$datum['balance']) {
+            if (stripos($datum['balance'] , '-') !== false) {
+                $balance -= trim($datum['balance'], '-');
+            } else {
+                $balance += $datum['balance'];
+            }
+        }
+        return (float)$balance;
     }
 
     private function getTable(int $index = 0)
@@ -242,19 +257,20 @@ class Graph extends Widget
             $item[$datum['secondDataIndex']] = str_replace(' ', '', $item[$datum['secondDataIndex']]);
 
             $sum = floatval($item[$datum['secondDataIndex']]);
+
             if (stripos($sum , '-') !== false) {
-                $this->balance = $this->balance - trim($sum, '-');
+                $this->balance -= trim($sum, '-');
             } else {
-                $this->balance = $this->balance + $sum;
+                $this->balance += $sum;
             }
 
             $dataTrArr[$position][count($headerTrLabelArr)+1] = $this->balance;
 
             array_push($compactChartData, ['x' => $item[$datum['firstDataIndex']], 'y' => $this->balance]);
 
-
             array_push($chartLabels, $item[$datum['firstDataIndex']]);
             array_push($chartData, $this->balance);
+
         }
 
         array_push($headerTrLabelArr, 'Balance');

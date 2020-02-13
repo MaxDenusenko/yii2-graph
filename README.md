@@ -45,6 +45,7 @@ RewriteRule ^(.*)$ web/$1
 ```
 
 Configure your virtual hosts
+
 Example for Apache
 
 ```

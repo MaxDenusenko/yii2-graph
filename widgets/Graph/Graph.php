@@ -236,6 +236,9 @@ class Graph extends Widget
 
         foreach ($dataTrArr as $position => $item)
         {
+            if (!isset($item[$datum['secondDataIndex']]) || !isset($item[$datum['secondDataIndex']]))
+                continue;
+
             $item[$datum['secondDataIndex']] = str_replace(' ', '', $item[$datum['secondDataIndex']]);
 
             $sum = floatval($item[$datum['secondDataIndex']]);

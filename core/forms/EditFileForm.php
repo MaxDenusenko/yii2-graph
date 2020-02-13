@@ -21,7 +21,8 @@ class EditFileForm extends CompositeForm
     {
         if ($model) {
             $this->file = $model->file;
-            if ($settings = $model->fileSettings && isset($settings[0])){
+            $settings = $model->fileSettings;
+            if (isset($settings[0])){
                 $this->settings = new FileSettingForm($settings[0]);
             } else {
                 $this->settings = new FileSettingForm();

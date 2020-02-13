@@ -54,7 +54,7 @@ class DatumsSearch extends Model
             'query' => $query,
         ]);
 
-        $this->date = $params['date'] ? date('Y-m-d', strtotime($params['date'])): false ;
+        $this->date = isset($params['date']) && $params['date'] ? date('Y-m-d', strtotime($params['date'])): false ;
 
         $this->load($params);
 

@@ -10,7 +10,8 @@ use yii\helpers\Url; ?>
 
 <div class="center-align panel_actions">
     <button id="downloadImage" onclick="createImage()" data-tooltip="Download plot as a png" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">image</i></button>
-    <button id="switch_xAxes_config" data-tooltip="Switch time line mode" onclick="switchXAxesConfig()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">alarm</i></button>
+    <button id="switch_distribution_mode" data-tooltip="Switch distribution mode" onclick="switchDistributionMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">alarm</i></button>
+    <button id="switch_xAxes_config" data-tooltip="Switch time line mode" onclick="switchXAxesConfig()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">timeline</i></button>
     <button id="switch_fill" data-tooltip="Switch fill" onclick="showHideFill()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">filter_hdr</i></button>
     <button id="switch_drag_mode" data-tooltip="Drag mode" onclick="toggleDragMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">pan_tool</i></button>
     <button id="switch_zoom_mode" data-tooltip="Zoom mode" onclick="toggleZoomMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">zoom_in</i></button>
@@ -196,15 +197,27 @@ use yii\helpers\Url; ?>
             }
         }
 
+        window.switchDistributionMode = function() {
+            let chart = window.myLine;
+            let scalesOptions = chart.options.scales;
+
+            scalesOptions.xAxes[0].distribution = scalesOptions.xAxes[0].distribution === 'linear' ? 'line' : 'linear';
+
+            chart.update();
+            updateButton();
+        };
+
         window.switchXAxesConfig = function () {
-            let button = document.getElementById('switch_xAxes_config');
+
             let chart = window.myLine;
             let scalesOptions = chart.options.scales;
 
             if(scalesOptions.xAxes[0].type === 'time') {
                 delete scalesOptions.xAxes[0].type;
+                window.myLine.data = GroupData;
             } else {
                 scalesOptions.xAxes[0].type = 'time';
+                window.myLine.data = TimeModeData;
             }
 
             chart.update();
@@ -230,7 +243,6 @@ use yii\helpers\Url; ?>
         };
         window.toggleDragMode = function() {
 
-            let button = document.getElementById('switch_drag_mode');
             let chart = window.myLine;
             let panOptions = chart.options.plugins.zoom.pan;
             panOptions.enabled = !panOptions.enabled;
@@ -240,7 +252,6 @@ use yii\helpers\Url; ?>
         };
         window.toggleZoomMode = function() {
 
-            let button = document.getElementById('switch_zoom_mode');
             let chart = window.myLine;
             let zoomOptions = chart.options.plugins.zoom.zoom;
             let panOptions = chart.options.plugins.zoom.pan;
@@ -272,7 +283,6 @@ use yii\helpers\Url; ?>
         };
         window.showHideFill = function() {
 
-            let button = document.getElementById('switch_fill');
             window.myLine.data.datasets.forEach(function(ds) {
                 ds.fill = !ds.fill;
             });
@@ -295,7 +305,8 @@ use yii\helpers\Url; ?>
 
         let ctx = document.getElementById('myChart').getContext('2d');
 
-        let data = {
+
+        let TimeModeData = {
             labels: <?= json_encode($summaryData['labels']); ?>,
             datasets: [
                 <?php foreach ($summaryData['datum'] as $k => $datum) : ?>
@@ -310,8 +321,26 @@ use yii\helpers\Url; ?>
                     pointRadius: 2
                 },
                 <?php endforeach; ?>
-            ]
+            ],
         };
+        let GroupData = {
+            labels: <?= json_encode($summaryData['labels']); ?>,
+            datasets: [
+                <?php foreach ($summaryData['datum'] as $k => $datum) : ?>
+                {
+                    label: "#<?=$k+1?> <?=$datum['graphName']?>",
+                    backgroundColor: getRandomRgb(),
+                    borderColor: getRandomRgb(),
+                    data: <?= json_encode($datum['chartData']); ?>,
+                    fill: true,
+                    lineTension: 0,
+                    borderWidth: 1,
+                    pointRadius: 2
+                },
+                <?php endforeach; ?>
+            ],
+        };
+        let data = TimeModeData;
 
         let options = {
             bezierCurve : false,
@@ -383,6 +412,7 @@ use yii\helpers\Url; ?>
                         data.push('#'+(index+1));
                         data.push('<br>');
                         let indexHelp = xLabel +'|-|'+tooltipModelValue+'|-|'+ (index) + '|-|'+datasetIndex;
+                        console.log(indexHelp);
                         var dataObj = summaryData[datasetIndex].compactChartDataWithData;
                         for (let prop in dataObj) {
                             if (prop === indexHelp) {

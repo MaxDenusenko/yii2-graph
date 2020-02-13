@@ -47,7 +47,7 @@ use yii\helpers\Url; ?>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($datum['dataTrArr'] as $i => $dataItem) : ?>
-                                        <? if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
+                                        <?php if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
                                         <?php $index = 0; ?>
                                         <tr data-index="<?=$i-$datum['skipTop']?>" data-datasetIndex="<?=$kd?>">
                                             <td><?=$i-$datum['skipTop']+1?></td>
@@ -86,7 +86,7 @@ use yii\helpers\Url; ?>
 <?php foreach ($summaryData['datum'] as $kd => $datum) : ?>
 
     <?php foreach ($datum['dataTrArr'] as $i => $dataItem) : ?>
-        <? if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
+        <?php if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
 
         <div style="display: none" id="<?=$dataItem[$datum['firstDataIndex']].'|-|'.rtrim($dataItem[$datum['balanceIndex']], '0').'|-|'.($i-$datum['skipTop']-1).'|-|'.$kd?>">
             <div class="content">

@@ -51,7 +51,7 @@ class DatumServices
             }
 
             $files[$file->id]['file'] = $file->getUploadedFileUrl('file');
-            $files[$file->id] = array_merge($files[$file->id], $setting);
+            $files[$file->id] = array_merge($files[$file->id], $setting->getAttributes());
         }
 
         return $files;

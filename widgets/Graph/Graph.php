@@ -98,7 +98,7 @@ class Graph extends Widget
         }
 
         if (!count($summaryData)) {
-            Yii::$app->session->setFlash('error', 'Data no found');
+            Yii::$app->session->setFlash('error', 'Data no found or is not valid');
             return false;
         }
 
@@ -119,9 +119,12 @@ class Graph extends Widget
         $result = false;
         try {
             $result = $this->doom->find('table')[$index];
+            if (!is_object($result) || !$result->count())
+                return false;
         } catch (ChildNotFoundException $e) {
-            Yii::$app->session->setFlash('error', 'Table not found');
+            Yii::$app->session->setFlash('error', $e->getMessage());
         }
+
         return $result;
     }
 
@@ -130,6 +133,8 @@ class Graph extends Widget
         $result = false;
         try {
             $result = $table->find('tr')[$index];
+            if (!is_object($result) || !$result->count())
+                return false;
         } catch (ChildNotFoundException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
@@ -143,13 +148,16 @@ class Graph extends Widget
 
         try {
             $ar = $headerTr->find('td');
-            if (!$ar->count()) {
+            if (is_object($ar) && !$ar->count()) {
                 $ar = $headerTr->find('th');
             }
         } catch (ChildNotFoundException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
             return false;
         }
+
+        if (!is_object($ar) || !$ar->count())
+            return false;
 
         foreach ($ar as $td) {
             if ($td->colspan) {
@@ -167,16 +175,22 @@ class Graph extends Widget
     {
         try {
             $dataTr = $table->find('tr');
+            if (!is_object($dataTr) || !$dataTr->count())
+                return false;
         } catch (ChildNotFoundException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
             return false;
         }
+
         $dataTrCnt = $dataTr->count() - $this->skipTop - $this->skipDown;
         $dataTrArr = [];
 
         for ($i = 0 + $this->skipTop; $i <= $dataTrCnt; $i++) {
             try {
                 $curDataTr = $table->find('tr', $i);
+                if (!is_object($curDataTr) || !$curDataTr->count())
+                    return false;
+
             } catch (ChildNotFoundException $e) {
                 Yii::$app->session->setFlash('error', $e->getMessage());
                 return false;
@@ -185,11 +199,14 @@ class Graph extends Widget
 
             try {
                 $ar = $curDataTr->find('td');
-                if (!$ar->count()) {
+                if (is_object($ar) && !$ar->count()) {
                     $ar = $curDataTr->find('th');
                 }
             } catch (ChildNotFoundException $e) {
                 Yii::$app->session->setFlash('error', $e->getMessage());
+                return false;
+            }
+            if (!is_object($ar) || !$ar->count()) {
                 return false;
             }
 

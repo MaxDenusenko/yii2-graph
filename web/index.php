@@ -4,8 +4,8 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotEnv = Dotenv\Dotenv::createImmutable(__DIR__. '/..');
 $dotEnv->load();
 
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+define('YII_DEBUG', getenv('YII_DEBUG'));
+define('YII_ENV', getenv('YII_ENV'));
 
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
 

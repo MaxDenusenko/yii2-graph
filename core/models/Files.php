@@ -114,12 +114,8 @@ class Files extends ActiveRecord
         if (isset($settings[0])){
             $setting = $this->fileSettings[0];
         } else {
-            return false;
-        }
-
-        if (!$setting) {
             Yii::$app->session->setFlash('error', "Settings for file {$this->file} not found.<br>".
-                Html::a('Add', Url::to(['files/update', 'id' => $this->id])));
+                Html::a('Add', Url::to(['files/update', 'key' => $this->id])));
             return false;
         }
 

@@ -110,8 +110,8 @@ class Files extends ActiveRecord
 
     public function checkRequired()
     {
-        $settings = $this->fileSettings;
-        if (isset($settings[0])){
+
+        if ($settings = $this->fileSettings && isset($settings[0])){
             $setting = $this->fileSettings[0];
         } else {
             return false;

@@ -43,9 +43,8 @@ class DatumServices
 
         foreach ($datum->files as $file) {
 
-            $settings = $file->fileSettings;
-            if (isset($settings[0])){
-                $setting = $file->fileSettings[0]->getAttributes();
+            if ($settings = $file->fileSettings && isset($settings[0])){
+                $setting = $file->fileSettings[0];
             } else {
                 return false;
             }

@@ -242,11 +242,7 @@ use yii\helpers\Url; ?>
 
             chart.update();
 
-            if (scalesOptions.xAxes[0].type === 'time') {
-                disableButton(button);
-            } else {
-                activateButton(button);
-            }
+            updateButton();
         };
         window.resetGraph = function() {
             init(chartType);
@@ -273,11 +269,7 @@ use yii\helpers\Url; ?>
             panOptions.enabled = !panOptions.enabled;
             chart.update();
 
-            if (panOptions.enabled) {
-                disableButton(button);
-            } else {
-                activateButton(button);
-            }
+            updateButton()
         };
         window.toggleZoomMode = function() {
 
@@ -289,11 +281,7 @@ use yii\helpers\Url; ?>
             panOptions.enabled = !zoomOptions.drag;
             chart.update();
 
-            if (zoomOptions.drag) {
-                activateButton(button);
-            } else {
-                disableButton(button);
-            }
+            updateButton()
         };
         window.showHideAll = function() {
             window.myLine.data.datasets.forEach(function(ds) {
@@ -323,11 +311,7 @@ use yii\helpers\Url; ?>
             });
             window.myLine.update();
 
-            if (window.myLine.data.datasets[0].fill) {
-                disableButton(button);
-            } else {
-                activateButton(button);
-            }
+            updateButton()
         };
         window.increaseBorderWidth = function() {
             window.myLine.data.datasets.forEach(function(ds) {

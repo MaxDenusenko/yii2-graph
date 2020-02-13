@@ -42,7 +42,13 @@ class DatumServices
         $files = [];
 
         foreach ($datum->files as $file) {
-            $setting = $file->fileSettings[0]->getAttributes();
+
+            $settings = $file->fileSettings;
+            if (isset($settings[0])){
+                $setting = $file->fileSettings[0]->getAttributes();
+            } else {
+                return false;
+            }
 
             $files[$file->id]['file'] = $file->getUploadedFileUrl('file');
             $files[$file->id] = array_merge($files[$file->id], $setting);

@@ -110,7 +110,12 @@ class Files extends ActiveRecord
 
     public function checkRequired()
     {
-        $setting = $this->fileSettings[0];
+        $settings = $this->fileSettings;
+        if (isset($settings[0])){
+            $setting = $this->fileSettings[0];
+        } else {
+            return false;
+        }
 
         if (!$setting) {
             Yii::$app->session->setFlash('error', "Settings for file {$this->file} not found.<br>".

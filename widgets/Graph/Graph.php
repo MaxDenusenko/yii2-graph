@@ -33,6 +33,8 @@ class Graph extends Widget
     public $skipTop;
     public $skipDown;
 
+    public $datasetIndex;
+
     public function init()
     {
         parent::init();
@@ -61,12 +63,15 @@ class Graph extends Widget
     public function run()
     {
         $summaryData = [];
+        $this->data = array_values($this->data);
 
-        foreach ($this->data as $datum) {
+        foreach ($this->data as $datasetIndex => $datum) {
 
+            $this->datasetIndex = $datasetIndex;
             $this->fileName     = $datum['file'];
             $this->balance      = $this->setBalance($datum);
             $this->skipTop      = isset($datum['skipTop']) ? (int)$datum['skipTop'] : 0;
+            $this->skipTop      += isset($datum['labelRowIndex']) ? (int)$datum['labelRowIndex'] : 0;
             $this->skipDown     = isset($datum['skipDown']) ? (int)$datum['skipDown'] : 0;
             $this->maxElement   = isset($datum['maxElement']) ? (int)$datum['maxElement'] : false;
 
@@ -80,11 +85,12 @@ class Graph extends Widget
             $headerTrLabelArr   = $this->getHeaderTrLabelArr($headerTr); if ($headerTrLabelArr === false) continue;
             $dataTrArr          = $this->getDataTrArr($table, $datum); if ($dataTrArr === false) continue;
 
-            list($chartLabels, $chartData, $headerTrLabelArr, $dataTrArr, $compactChartData) = $this->getChartData($dataTrArr, $headerTrLabelArr, $datum);
+            list($chartLabels, $chartData, $headerTrLabelArr, $dataTrArr,
+                $compactChartData, $compactChartDataWithData) = $this->getChartData($dataTrArr, $headerTrLabelArr, $datum);
 
             $balanceIndex = count($headerTrLabelArr);
 
-            $summaryData['datum'][] = [
+            $summaryData['datum'][$this->datasetIndex] = [
                 'chartLabels'       => $chartLabels,
                 'chartData'         => $chartData,
                 'dataTrArr'         => $dataTrArr,
@@ -96,6 +102,7 @@ class Graph extends Widget
                 'skipDown'          => $datum['skipDown'],
                 'graphName'         => $datum['graphName'],
                 'compactChartData'  => $compactChartData,
+                'compactChartDataWithData'  => $compactChartDataWithData,
             ];
         }
 
@@ -146,14 +153,15 @@ class Graph extends Widget
     private function getHeaderTr(Dom\HtmlNode $table, int $index)
     {
         $result = false;
+
         try {
-            $result = $table->find('tr')[$index];
-            if (!is_object($result) || !$result->count())
+            $result = $table->find('tr');
+            if (!is_object($result) || !$result->count()|| !isset($result[$index-1]))
                 return false;
         } catch (ChildNotFoundException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        return $result;
+        return $result[$index-1];
     }
 
     private function getHeaderTrLabelArr(Dom\HtmlNode $headerTr)
@@ -198,9 +206,15 @@ class Graph extends Widget
         }
 
         $dataTrCnt = $dataTr->count() - $this->skipTop - $this->skipDown;
+
         $dataTrArr = [];
 
         for ($i = 0 + $this->skipTop; $i <= $dataTrCnt; $i++) {
+
+            if ($this->maxElement && ($i) >= $this->maxElement + $this->skipTop) {
+                break;
+            }
+
             try {
                 $curDataTr = $table->find('tr', $i);
                 if (!is_object($curDataTr) || !$curDataTr->count())
@@ -234,12 +248,8 @@ class Graph extends Widget
                 }
                 $dataTrArr[$i][$position] = $td->text;
             }
-
-            if ($this->maxElement && ($i-1) >= $this->maxElement) {
-                break;
-            }
         }
-
+        $dataTrArr = array_values($dataTrArr);
         return $dataTrArr;
     }
 
@@ -248,6 +258,7 @@ class Graph extends Widget
         $chartLabels = [];
         $chartData = [];
         $compactChartData = [];
+        $compactChartDataWithData = [];
 
         foreach ($dataTrArr as $position => $item)
         {
@@ -268,14 +279,20 @@ class Graph extends Widget
 
             array_push($compactChartData, ['x' => $item[$datum['firstDataIndex']], 'y' => $this->balance]);
 
+            $helpArr = [];
+            foreach ($item as $k => $value) {
+                $helpArr[$headerTrLabelArr[$k]] = $value;
+            };
+            $index = $item[$datum['firstDataIndex']]."|-|".$this->balance.'|-|'.$position.'|-|'.$this->datasetIndex;
+            $compactChartDataWithData[$index] = $helpArr;
+
             array_push($chartLabels, $item[$datum['firstDataIndex']]);
             array_push($chartData, $this->balance);
-
         }
 
         array_push($headerTrLabelArr, 'Balance');
 
-        return [$chartLabels, $chartData, $headerTrLabelArr, $dataTrArr, $compactChartData];
+        return [$chartLabels, $chartData, $headerTrLabelArr, $dataTrArr, $compactChartData, $compactChartDataWithData];
     }
 
     private function getFilePath()

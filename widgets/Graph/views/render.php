@@ -49,8 +49,8 @@ use yii\helpers\Url; ?>
                                     <?php foreach ($datum['dataTrArr'] as $i => $dataItem) : ?>
                                         <?php if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
                                         <?php $index = 0; ?>
-                                        <tr data-index="<?=$i-$datum['skipTop']?>" data-datasetIndex="<?=$kd?>">
-                                            <td><?=$i-$datum['skipTop']+1?></td>
+                                        <tr data-index="<?=$i?>" data-datasetIndex="<?=$kd?>">
+                                            <td><?=$i+1?></td>
                                             <?php foreach ($dataItem as $position => $d) : ?>
                                                 <?php $index++ ?>
                                                 <?php if ($index == $position) : ?>
@@ -83,40 +83,6 @@ use yii\helpers\Url; ?>
     <?php endforeach; ?>
 </ul>
 
-<?php foreach ($summaryData['datum'] as $kd => $datum) : ?>
-
-    <?php foreach ($datum['dataTrArr'] as $i => $dataItem) : ?>
-        <?php if (!isset($dataItem[$datum['firstDataIndex']]) || !isset($dataItem[$datum['balanceIndex']])) continue; ?>
-
-        <div style="display: none" id="<?=$dataItem[$datum['firstDataIndex']].'|-|'.rtrim($dataItem[$datum['balanceIndex']], '0').'|-|'.($i-$datum['skipTop']-1).'|-|'.$kd?>">
-            <div class="content">
-
-                <table>
-                    <thead></thead>
-                    <tbody>
-                        <?php $index = 0; ?>
-                        <?php foreach ($dataItem as $position => $data) : ?>
-                            <tr>
-                                <?php $index++ ?>
-                                <?php if ($index == $position) : ?>
-                                    <td><?=$datum['headerTrLabelArr'][$position]?></td>
-                                <?php else: ?>
-                                    <?php $index = $position ?>
-                                    <td>-</td>
-                                <?php endif; ?>
-
-                                <td><?=$data?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-
-            </div>
-        </div>
-    <?php endforeach; ?>
-
-<?php endforeach; ?>
-
 <script>
 
     function createImage() {
@@ -148,7 +114,8 @@ use yii\helpers\Url; ?>
                     display: true,
                     labelString: "Date"
                 },
-            }];
+            }],
+            summaryData = <?= json_encode($summaryData['datum']); ?>;
 
         function showTooltip(chart, index, datasetIndex){
             let segment = chart.getDatasetMeta(datasetIndex).data[index];
@@ -413,21 +380,20 @@ use yii\helpers\Url; ?>
                         tooltipModelValue = tooltipModelValue.toFixed(2);
                         tooltipModelValue = parseFloat(tooltipModelValue);
 
-                        console.log(xLabel +'|-|'+tooltipModelValue+'|-|'+ (index-1) + '|-|'+datasetIndex);
-
-                        let table = document.getElementById(xLabel +'|-|'+tooltipModelValue+'|-|'+ (index-1) + '|-|'+datasetIndex);
-                        let tr = table.querySelectorAll('tr');
-
                         data.push('#'+(index+1));
                         data.push('<br>');
+                        let indexHelp = xLabel +'|-|'+tooltipModelValue+'|-|'+ (index) + '|-|'+datasetIndex;
+                        var dataObj = summaryData[datasetIndex].compactChartDataWithData;
+                        for (let prop in dataObj) {
+                            if (prop === indexHelp) {
 
-                        tr.forEach(function( tr ){
-
-                            let td = tr.querySelectorAll('td');
-                            data.push( '<b>' + td.item(0).innerText + '</b>' + ' : '+td.item(1).innerText);
-                            data.push('<br>');
-                        });
-
+                                let props = dataObj[prop];
+                                for (let propsLabel in props) {
+                                    data.push( '<b>' + propsLabel + '</b>' + ' : '+props[propsLabel]);
+                                    data.push('<br>');
+                                }
+                            }
+                        }
 
                         tooltipEl.html(data);
                     }

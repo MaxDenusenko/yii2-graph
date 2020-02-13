@@ -409,13 +409,22 @@ use yii\helpers\Url; ?>
                         tooltipModelValue = tooltipModelValue.toFixed(2);
                         tooltipModelValue = parseFloat(tooltipModelValue);
 
-                        data.push('#'+(index+1));
+                        data.push( '<span style="background-color: '+tooltip.labelColors[0].backgroundColor+'">#'+(index+1)+'</span>');
                         data.push('<br>');
-                        let indexHelp = xLabel +'|-|'+tooltipModelValue+'|-|'+ (index) + '|-|'+datasetIndex;
-                        console.log(indexHelp);
+                        let indexHelp = (index) + '|-|'+datasetIndex;
                         var dataObj = summaryData[datasetIndex].compactChartDataWithData;
+                        let check = false;
+
                         for (let prop in dataObj) {
                             if (prop === indexHelp) {
+
+                                check = true;
+
+                                data.push( '<b>x</b>' + ' : '+ xLabel);
+                                data.push('<br>');
+                                data.push( '<b>y</b>' + ' : '+ tooltipModelValue);
+                                data.push('<br>');
+                                data.push('<br>');
 
                                 let props = dataObj[prop];
                                 for (let propsLabel in props) {
@@ -423,6 +432,12 @@ use yii\helpers\Url; ?>
                                     data.push('<br>');
                                 }
                             }
+                        }
+
+                        if (check === false) {
+                            data.push( '<b>x</b>' + ' : '+ xLabel);
+                            data.push('<br>');
+                            data.push( '<b>y</b>' + ' : '+ tooltipModelValue);
                         }
 
                         tooltipEl.html(data);

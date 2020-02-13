@@ -283,7 +283,7 @@ class Graph extends Widget
             foreach ($item as $k => $value) {
                 $helpArr[$headerTrLabelArr[$k]] = $value;
             };
-            $index = $item[$datum['firstDataIndex']]."|-|".$this->balance.'|-|'.$position.'|-|'.$this->datasetIndex;
+            $index = $position.'|-|'.$this->datasetIndex;
             $compactChartDataWithData[$index] = $helpArr;
 
             array_push($chartLabels, $item[$datum['firstDataIndex']]);

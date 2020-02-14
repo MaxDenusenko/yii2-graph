@@ -25,7 +25,7 @@ use yii\helpers\Html;
         'data-tooltip' => 'Enter column index for balance data. Count start from 1.
          Sample data: 8.16 or -5.78']) ?>
     <?= $activeForm->field($form->settings, 'labelRowIndex')->textInput(['maxlength' => true, 'class' => 'tooltipped',
-        'data-tooltip' => 'Enter row index for label data. Count start from 0.
+        'data-tooltip' => 'Enter row index for label data. Count start from 1.
          Sample data: Item or Commission']) ?>
     <?= $activeForm->field($form->settings, 'graphName')->textInput(['maxlength' => true]) ?>
     <?= $activeForm->field($form->settings, 'balance')->textInput(['maxlength' => true, 'class' => 'tooltipped',

@@ -10,8 +10,8 @@ use yii\helpers\Url; ?>
 
 <div class="center-align panel_actions">
     <button id="downloadImage" onclick="createImage()" data-tooltip="Download plot as a png" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">image</i></button>
-    <button id="switch_distribution_mode" data-tooltip="Switch distribution mode" onclick="switchDistributionMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">alarm</i></button>
-    <button id="switch_xAxes_config" data-tooltip="Switch time line mode" onclick="switchXAxesConfig()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">timeline</i></button>
+    <button id="switch_distribution_mode" data-tooltip="Switch distribution mode" onclick="switchDistributionMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">timeline</i></button>
+<!--     <button id="switch_xAxes_config" data-tooltip="Switch time line mode" onclick="switchXAxesConfig()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">alarm</i></button> -->
     <button id="switch_fill" data-tooltip="Switch fill" onclick="showHideFill()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">filter_hdr</i></button>
     <button id="switch_drag_mode" data-tooltip="Drag mode" onclick="toggleDragMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">pan_tool</i></button>
     <button id="switch_zoom_mode" data-tooltip="Zoom mode" onclick="toggleZoomMode()" class="btn blue darken-4 btn-md tooltipped"><i class="material-icons">zoom_in</i></button>

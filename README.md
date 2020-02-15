@@ -93,15 +93,15 @@ For each downloaded file you need to specify your settings.
 
 *First Data Index*
 
-Enter column(*td* or *td*) index for date and time data. 
+Enter column(*td* or *th*) index for date and time data. 
 Count start from left.
 The countdown starts on the left from position 1.
 Sample data: *2020.02.13 05:55:08*.
 These values will be used for *x coordinates*.
 
-*First Data Index*
+*Second Data Index*
 
-Enter column(*td* or *td*) index for balance data. 
+Enter column(*td* or *th*) index for balance data. 
 Count start from left.
 The countdown starts on the left from position 1.
 Sample data: 8.16 to add the sum to the balance | -5.78 to take away the amount
